@@ -41,7 +41,7 @@
         linear-gradient(180deg,var(--bg2),var(--bg));
       overflow-x:hidden;
     }
-    .wrap{max-width:1360px;margin:0 auto;padding:20px; width:min(100%,1360px)}
+    .wrap{max-width:1360px;margin:0 auto;padding:14px; width:min(100%,1360px)}
     .hero,.card{
       background:var(--card);
       border:1px solid var(--line);
@@ -49,7 +49,7 @@
       box-shadow:var(--shadow);
     }
     .hero{
-      padding:24px 26px;
+      padding:16px 18px;
       background:linear-gradient(135deg,#ffffff 0%, #f7faff 100%);
       position:relative;
       overflow:hidden;
@@ -62,59 +62,59 @@
       background:radial-gradient(circle, rgba(93,134,232,.18), rgba(93,134,232,0));
       pointer-events:none;
     }
-    .card{padding:18px;background:linear-gradient(180deg,#fff,#fcfdff)}
-    h1{margin:0 0 10px;font-size:clamp(1.7rem,3.6vw,2.7rem);letter-spacing:-.03em;color:#173a8d;line-height:1.12}
-    h2{margin:0 0 8px;font-size:1.12rem;letter-spacing:-.01em}
+    .card{padding:14px;background:linear-gradient(180deg,#fff,#fcfdff)}
+    h1{margin:0 0 6px;font-size:clamp(1.35rem,2.8vw,2.15rem);letter-spacing:-.03em;color:#173a8d;line-height:1.08}
+    h2{margin:0 0 6px;font-size:1.04rem;letter-spacing:-.01em}
     h3{letter-spacing:-.01em}
-    p{margin:.35rem 0;line-height:1.5}
+    p{margin:.25rem 0;line-height:1.38}
     .lead,.muted,.small{color:var(--muted)}
-    .lead{max-width:1080px;font-size:1.02rem}
-    .layout{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px;align-items:start}
+    .lead{max-width:1080px;font-size:.92rem}
+    .layout{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px;align-items:start}
     .controls{position:static}
-    .controls h2{font-size:1.22rem}
-    .controls .subtle{margin-bottom:10px}
+    .controls h2{font-size:1.06rem}
+    .controls .subtle{margin-bottom:6px}
     .control{
-      margin:10px 0;
-      padding:11px 12px 9px;
+      margin:8px 0;
+      padding:8px 10px 7px;
       border:1px solid #e7edf5;
       border-radius:14px;
       background:linear-gradient(180deg,#fcfdff,#f7faff);
     }
     .controlRow{
       display:grid;
-      grid-template-columns:1.35fr 1fr 1fr 1fr;
-      gap:10px;
+      grid-template-columns:1.35fr 1fr;
+      gap:6px;
       align-items:stretch;
-      margin-top:10px;
+      margin-top:8px;
     }
     .control.compact{
       margin:0;
-      padding:10px 10px 8px;
+      padding:8px 9px 6px;
     }
     .control.compact label{
-      font-size:.96rem;
-      margin-bottom:8px;
+      font-size:.88rem;
+      margin-bottom:6px;
     }
-    .control label{display:flex;justify-content:space-between;gap:10px;font-weight:800;margin-bottom:10px}
+    .control label{display:flex;justify-content:space-between;gap:8px;font-weight:800;margin-bottom:7px}
     input[type=range]{
       width:100%;
       accent-color:var(--accent);
       cursor:pointer;
     }
     .pill{
-      font-size:.84rem;
+      font-size:.78rem;
       border:1px solid #cfe0f6;
       background:#eef4ff;
       color:#2452ad;
       border-radius:999px;
-      padding:4px 10px;
+      padding:3px 8px;
       white-space:nowrap;
       box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
     }
     .timeControlRow{
       display:grid;
-      grid-template-columns:minmax(0,1fr) 82px;
-      gap:8px;
+      grid-template-columns:minmax(0,1fr) 68px;
+      gap:6px;
       align-items:stretch;
       margin:0;
     }
@@ -122,20 +122,20 @@
     .timeControlRow .btns{
       display:flex;
       flex-direction:column;
-      gap:6px;
+      gap:5px;
       margin:0;
     }
     .timeControlRow .btns button{
       width:100%;
       flex:1;
-      padding:7px 9px;
+      padding:6px 8px;
     }
     .btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
     button{
       border:1px solid #c2cfde;
       background:#fff;
-      border-radius:12px;
-      padding:10px 14px;
+      border-radius:10px;
+      padding:8px 11px;
       font-weight:800;
       cursor:pointer;
       color:var(--ink);
@@ -174,10 +174,10 @@
       font-weight:700;
       line-height:1.45;
     }
-    .main{display:grid;gap:16px;min-width:0}
-    .visuals{display:grid;grid-template-columns:540px 1fr;gap:16px;align-items:start}
-    .plotArea{display:grid;gap:16px;min-width:0}
-    .legend{display:flex;flex-wrap:wrap;gap:8px 12px;color:var(--muted);font-size:.92rem;margin-top:12px}
+    .main{display:grid;gap:10px;min-width:0}
+    .visuals{display:grid;grid-template-columns:540px 1fr;gap:10px;align-items:start}
+    .plotArea{display:grid;gap:10px;min-width:0}
+    .legend{display:flex;flex-wrap:wrap;gap:6px 10px;color:var(--muted);font-size:.84rem;margin-top:8px}
     .key{display:inline-flex;align-items:center;gap:6px}
     .sw{width:18px;height:10px;border-radius:999px;display:inline-block}
     .sw.ex{background:var(--zone1);border:1px solid #b5cff6}
@@ -190,7 +190,7 @@
     .plot{background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid #e7edf5;border-radius:16px}
     .axis{stroke:#344054;stroke-width:2}
     .gridline{stroke:#dde5ef;stroke-width:1}
-    .tick{font-size:13px;fill:#667085}
+    .tick{font-size:12px;fill:#667085}
     .curve{fill:none;stroke:var(--green);stroke-width:4.5}
     .dash{stroke:#667085;stroke-width:2;stroke-dasharray:7 7}
     .threshold{stroke:#d97000;stroke-width:2;stroke-dasharray:6 6}
@@ -207,6 +207,8 @@
     .info p{margin:0;color:var(--muted);font-size:.95rem}
     .formula{font-family:"Times New Roman",Times,serif;font-style:italic}
     .subtle{font-size:.9rem;color:var(--muted)}
+    #columnSvg{max-height:72vh;}
+    #curveSvg{max-height:50vh;}
     @media(max-width:1120px){
       .visuals{grid-template-columns:1fr}
     }
@@ -216,47 +218,67 @@
       .controlRow{grid-template-columns:1fr 1fr}
     }
     @media(max-width:760px){
-      .wrap{padding:12px}
-      .hero,.card{padding:14px;border-radius:16px}
+      .wrap{padding:8px}
+      .hero,.card{padding:10px;border-radius:14px}
+      .layout,.visuals,.cards2,.infoGrid,.main,.plotArea{gap:8px}
+      .layout{margin-top:8px}
       .stats{grid-template-columns:1fr}
-      .legend{font-size:.88rem}
+      .legend{font-size:.76rem;line-height:1.25;margin-top:6px}
+      .key{gap:5px}
+      .sw{width:14px;height:8px}
     }
     @media(max-width:640px){
-      h1{font-size:1.55rem}
-      .lead{font-size:.96rem}
-      .layout,.visuals,.cards2,.infoGrid{gap:12px}
-      .control{padding:11px 10px 9px}
-      .control label{flex-direction:column;align-items:flex-start;gap:8px}
-      .pill{align-self:flex-start}
-      .btns button{flex:1 1 0; min-width:0}
-      .timeControlRow{grid-template-columns:minmax(0,1fr) 76px}
-      .timeControlRow .btns button{padding:7px 8px}
-      .status,.info p,.muted,.subtle{font-size:.92rem}
+      h1{font-size:1.14rem;line-height:1.06;margin-bottom:4px}
+      h2{font-size:.95rem;margin-bottom:4px}
+      .lead{font-size:.78rem;line-height:1.24}
+      .controls .subtle,.plotArea .muted{display:none}
+      .controlRow{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:6px}
+      .timeControlRow{grid-column:auto;grid-template-columns:1fr;gap:4px}
+      .timeControlRow .btns{flex-direction:row;gap:3px}
+      .control.compact{padding:6px 6px 5px}
+      .control.compact label{font-size:.74rem;margin-bottom:4px;gap:3px;flex-direction:column;align-items:flex-start}
+      .control label{gap:3px;margin-bottom:4px}
+      .pill{font-size:.65rem;padding:2px 5px}
+      input[type=range]{height:17px}
+      button{padding:4px 4px;border-radius:8px;font-size:.66rem}
+      .timeControlRow .btns button{padding:4px 3px}
+      .status,.info p,.muted,.subtle{font-size:.82rem}
+      .plot{border-radius:12px}
+      #columnSvg{max-height:58vh}
+      #curveSvg{max-height:40vh}
     }
     @media(max-width:480px){
-      .wrap{padding:10px}
-      .hero,.card{padding:12px}
-      .hero h1{font-size:1.42rem}
-      .controls h2,.card h2{font-size:1.02rem}
-      .stat strong{font-size:.98rem}
-      .controlRow{grid-template-columns:1fr}
-      .legend{flex-direction:column;align-items:flex-start;gap:8px}
-      button{padding:10px 12px}
+      .wrap{padding:6px}
+      .hero,.card{padding:8px;border-radius:12px}
+      .hero::after{width:150px;height:150px;right:-60px;top:-65px}
+      .hero h1{font-size:1.02rem;line-height:1.05;margin-bottom:3px}
+      .hero .lead{font-size:.72rem;line-height:1.18}
+      .controls h2,.card h2{font-size:.86rem;margin-bottom:3px}
+      .controlRow{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+      .timeControlRow{grid-column:auto;grid-template-columns:1fr;gap:3px}
+      .timeControlRow .btns{flex-direction:row;gap:3px}
+      .control.compact{padding:5px 5px 4px;border-radius:10px}
+      .control.compact label{font-size:.66rem;margin-bottom:3px}
+      .pill{font-size:.58rem;padding:1px 4px}
+      button{padding:3px 3px;font-size:.61rem}
+      .legend{font-size:.68rem;gap:4px;max-height:2.2em;overflow:hidden}
+      .sw{width:12px;height:7px}
+      #columnSvg{max-height:55vh}
+      #curveSvg{max-height:38vh}
     }
+
   </style>
 </head>
 <body>
 <div class="wrap">
   <section class="hero">
     <h1>Packed-bed adsorption: physical meaning of the MTZ</h1>
-    <p class="lead">This simulation shows a <strong>vertical fixed-bed column</strong> packed with adsorbent particles. Water enters from the <strong>top</strong> and flows <strong>downward</strong>. The <strong>mass transfer zone (MTZ)</strong> is where adsorption is actively happening. Increasing <strong>C<sub>0</sub></strong> makes the bed fill faster, so breakthrough occurs earlier.</p>
+    <p class="lead">Vertical fixed-bed column with downward flow. The <strong>MTZ</strong> is the active adsorption zone; increasing <strong>C<sub>0</sub></strong> fills the bed faster and shifts breakthrough earlier.</p>
   </section>
 
   <div class="layout">
     <aside class="card controls">
       <h2>Simulation controls</h2>
-      <p class="subtle">Adjust the bed geometry and inlet concentration, then watch the MTZ move downward through the packed adsorbent bed.</p>
-
       <div class="controlRow">
         <div class="timeControlRow">
           <div class="control compact">
@@ -271,16 +293,6 @@
         </div>
 
         <div class="control compact">
-          <label for="bedSlider"><span>Bed height, <span class="formula">Z</span></span><span class="pill" id="bedValue">1.80 m</span></label>
-          <input id="bedSlider" type="range" min="0.6" max="1.8" step="0.1" value="1.8">
-        </div>
-
-        <div class="control compact">
-          <label for="mtzSlider"><span>MTZ height, <span class="formula">H<sub>MTZ</sub></span></span><span class="pill" id="mtzValue">0.22 m</span></label>
-          <input id="mtzSlider" type="range" min="0.10" max="0.45" step="0.01" value="0.22">
-        </div>
-
-        <div class="control compact">
           <label for="feedSlider"><span>Inlet concentration, <span class="formula">C<sub>0</sub></span></span><span class="pill" id="feedValue">1.00</span></label>
           <input id="feedSlider" type="range" min="0.5" max="2.0" step="0.1" value="1.0">
         </div>
@@ -292,7 +304,7 @@
       <div class="visuals">
         <div class="card">
           <h2>Vertical packed column</h2>
-          <svg id="columnSvg" viewBox="0 0 540 760" aria-label="Packed adsorption column simulation">
+          <svg id="columnSvg" viewBox="0 0 540 700" aria-label="Packed adsorption column simulation">
             <defs>
               <marker id="arrowDown" markerWidth="10" markerHeight="10" refX="3" refY="9" orient="auto" markerUnits="strokeWidth">
                 <path d="M0,0 L6,0 L3,9 z" fill="#172033"></path>
@@ -378,8 +390,6 @@
               <tspan x="24" dy="17">zone</tspan>
             </text>
 
-            <rect id="mtzHeightBg" x="326" y="182" width="138" height="28" rx="10" fill="#fff7eb" opacity="0.95"></rect>
-            <text id="mtzHeightText" x="336" y="201" font-size="17" fill="#b66500" font-weight="800">H_MTZ</text>
           </svg>
 
           <div class="legend">
@@ -392,7 +402,6 @@
         <div class="plotArea">
           <div class="card">
             <h2>Breakthrough curve</h2>
-            <p class="muted">The effluent concentration follows a smooth breakthrough curve. Here, the outlet response is shown with a Thomas-model-style sigmoidal profile for <span class="formula">C/C<sub>0</sub></span> versus time.</p>
             <svg id="curveSvg" class="plot" viewBox="0 0 640 410" aria-label="Breakthrough curve C over C0 versus time">
               <g id="curveGrid"></g>
               <path id="curvePath" class="curve"></path>
@@ -415,8 +424,6 @@
 
 <script>
 const timeSlider=document.getElementById('timeSlider');
-const bedSlider=document.getElementById('bedSlider');
-const mtzSlider=document.getElementById('mtzSlider');
 const feedSlider=document.getElementById('feedSlider');
 const playBtn=document.getElementById('playBtn');
 const resetBtn=document.getElementById('resetBtn');
@@ -428,22 +435,22 @@ function logistic(z){return 1/(1+Math.exp(-z));}
 function thomasNormalized(t,tB,tE){
   const delta=Math.max(1e-6,tE-tB);
   const t50=(tB+tE)/2;
-  const alpha=(2*Math.log(19))/delta; // makes C/C0≈0.05 at tB and ≈0.95 at tE
+  const alpha=(2*Math.log(19))/delta; // makes C/C0≈0.05 at tb and ≈0.95 at te
   return logistic(alpha*(t-t50));
 }
 
 function state(){
   const t=+timeSlider.value;
-  const Z=+bedSlider.value;
-  const H=+mtzSlider.value;
+  const Z=1.80; // Fixed bed height; editing control removed
+  const H=0.30; // Fixed MTZ height; editing control removed
   const C0=+feedSlider.value;
   const hFrac=H/Z;
 
   // Fixed adsorbent capacity: a higher influent concentration uses the bed faster.
   // Therefore both breakthrough and exhaustion times scale approximately with 1/C0.
   const baseExhaustionTime=100;
-  const exhaustion=baseExhaustionTime/C0;            // t_E at C/C0 ≈ 0.95
-  const breakthrough=(1-hFrac)*baseExhaustionTime/C0; // t_B at C/C0 ≈ 0.05
+  const exhaustion=baseExhaustionTime/C0;            // te at C/C0 ≈ 0.95
+  const breakthrough=(1-hFrac)*baseExhaustionTime/C0; // tb at C/C0 ≈ 0.05
 
   const progress=clamp(t/exhaustion,0,1);
   const center=(-hFrac/2) + progress*(1+hFrac);
@@ -611,10 +618,6 @@ function drawColumn(s){
   document.getElementById('labelFr').setAttribute('y', frY - 8);
   document.getElementById('labelFrBg').setAttribute('y', frY - 24);
 
-  const mtzTextY = (topY + bottomY)/2;
-  document.getElementById('mtzHeightText').setAttribute('y', mtzTextY + 6);
-  document.getElementById('mtzHeightBg').setAttribute('y', mtzTextY - 14);
-  document.getElementById('mtzHeightText').textContent=`H_MTZ = ${s.H.toFixed(2)} m`;
 
   // internal distributor and collector plates
   let topPlate='', bottomPlate='';
@@ -723,12 +726,12 @@ function drawCurve(s){
   label.textContent=`C/C₀ = ${s.cNorm.toFixed(2)}`;
 
   const axis=document.getElementById('curveAxis');
-  axis.innerHTML += `<text class="tick" x="${scale.x(s.breakthrough)}" y="${scale.H-scale.b+42}" text-anchor="middle">t_B</text>`;
-  axis.innerHTML += `<text class="tick" x="${scale.x(s.exhaustion)}" y="${scale.H-scale.b+42}" text-anchor="middle">t_E</text>`;
+  axis.innerHTML += `<text class="tick" x="${scale.x(s.breakthrough)}" y="${scale.H-scale.b+42}" text-anchor="middle">t<tspan baseline-shift="sub" font-size="10">b</tspan></text>`;
+  axis.innerHTML += `<text class="tick" x="${scale.x(s.exhaustion)}" y="${scale.H-scale.b+42}" text-anchor="middle">t<tspan baseline-shift="sub" font-size="10">e</tspan></text>`;
   const pairY = scale.H-17;
   const centerX = (scale.W+scale.l-scale.r)/2;
-  axis.innerHTML += `<text class="tick" x="${centerX-90}" y="${pairY}" text-anchor="middle">t_B = ${s.breakthrough.toFixed(1)} min</text>`;
-  axis.innerHTML += `<text class="tick" x="${centerX+90}" y="${pairY}" text-anchor="middle">t_E = ${s.exhaustion.toFixed(1)} min</text>`;
+  axis.innerHTML += `<text class="tick" x="${centerX-90}" y="${pairY}" text-anchor="middle">t<tspan baseline-shift="sub" font-size="10">b</tspan> = ${s.breakthrough.toFixed(1)} min</text>`;
+  axis.innerHTML += `<text class="tick" x="${centerX+90}" y="${pairY}" text-anchor="middle">t<tspan baseline-shift="sub" font-size="10">e</tspan> = ${s.exhaustion.toFixed(1)} min</text>`;
   axis.innerHTML += `<text class="tick" x="${scale.l+4}" y="${scale.y(0.05)-7}">0.05</text>`;
   axis.innerHTML += `<text class="tick" x="${scale.l+4}" y="${scale.y(0.95)-7}">0.95</text>`;
 }
@@ -755,8 +758,6 @@ function update(){
   const s=state();
   timeSlider.max=Math.max(100, Math.ceil(s.exhaustion*1.05));
   document.getElementById('timeValue').textContent=`${s.t.toFixed(0)} min`;
-  document.getElementById('bedValue').textContent=`${s.Z.toFixed(2)} m`;
-  document.getElementById('mtzValue').textContent=`${s.H.toFixed(2)} m`;
   document.getElementById('feedValue').textContent=s.C0.toFixed(2);
 
 
@@ -784,14 +785,12 @@ resetBtn.addEventListener('click',()=>{
   }
 
   timeSlider.value=0;
-  bedSlider.value=1.8;
-  mtzSlider.value=0.22;
   feedSlider.value=1.0;
 
   update();
 });
 
-[timeSlider,bedSlider,mtzSlider,feedSlider].forEach(el=>el.addEventListener('input',update));
+[timeSlider,feedSlider].forEach(el=>el.addEventListener('input',update));
 update();
 </script>
 </body>
