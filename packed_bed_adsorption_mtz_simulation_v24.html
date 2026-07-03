@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Packed Bed Adsorption: MTZ Simulation</title>
+  <style>
+    :root{
+      --bg:#f3f7fb;
+      --bg2:#eef4fb;
+      --card:#ffffff;
+      --card2:#f9fbfe;
+      --line:#dbe5f0;
+      --line2:#c8d6e5;
+      --ink:#142033;
+      --muted:#5b6879;
+      --accent:#1f4db8;
+      --accent2:#5d86e8;
+      --accent-soft:#eaf1ff;
+      --blue:#3a78d4;
+      --orange:#ef8d32;
+      --orange-soft:#fff2df;
+      --green:#16825d;
+      --red:#c24a3d;
+      --zone1:#dfeaff;
+      --zone2:#ffe9cb;
+      --zone3:#eef4f8;
+      --shadow:0 18px 42px rgba(15,23,42,.07);
+      --shadow-soft:0 8px 24px rgba(15,23,42,.05);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(93,134,232,.14), transparent 30%),
+        radial-gradient(circle at top right, rgba(58,120,212,.10), transparent 28%),
+        linear-gradient(180deg,var(--bg2),var(--bg));
+      overflow-x:hidden;
+    }
+    .wrap{max-width:1360px;margin:0 auto;padding:20px; width:min(100%,1360px)}
+    .hero,.card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero{
+      padding:24px 26px;
+      background:linear-gradient(135deg,#ffffff 0%, #f7faff 100%);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      width:260px;height:260px;
+      right:-80px;top:-90px;
+      background:radial-gradient(circle, rgba(93,134,232,.18), rgba(93,134,232,0));
+      pointer-events:none;
+    }
+    .card{padding:18px;background:linear-gradient(180deg,#fff,#fcfdff)}
+    h1{margin:0 0 10px;font-size:clamp(1.7rem,3.6vw,2.7rem);letter-spacing:-.03em;color:#173a8d;line-height:1.12}
+    h2{margin:0 0 8px;font-size:1.12rem;letter-spacing:-.01em}
+    h3{letter-spacing:-.01em}
+    p{margin:.35rem 0;line-height:1.5}
+    .lead,.muted,.small{color:var(--muted)}
+    .lead{max-width:1080px;font-size:1.02rem}
+    .layout{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px;align-items:start}
+    .controls{position:static}
+    .controls h2{font-size:1.22rem}
+    .controls .subtle{margin-bottom:10px}
+    .control{
+      margin:10px 0;
+      padding:11px 12px 9px;
+      border:1px solid #e7edf5;
+      border-radius:14px;
+      background:linear-gradient(180deg,#fcfdff,#f7faff);
+    }
+    .controlRow{
+      display:grid;
+      grid-template-columns:1.35fr 1fr 1fr 1fr;
+      gap:10px;
+      align-items:stretch;
+      margin-top:10px;
+    }
+    .control.compact{
+      margin:0;
+      padding:10px 10px 8px;
+    }
+    .control.compact label{
+      font-size:.96rem;
+      margin-bottom:8px;
+    }
+    .control label{display:flex;justify-content:space-between;gap:10px;font-weight:800;margin-bottom:10px}
+    input[type=range]{
+      width:100%;
+      accent-color:var(--accent);
+      cursor:pointer;
+    }
+    .pill{
+      font-size:.84rem;
+      border:1px solid #cfe0f6;
+      background:#eef4ff;
+      color:#2452ad;
+      border-radius:999px;
+      padding:4px 10px;
+      white-space:nowrap;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+    }
+    .timeControlRow{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 82px;
+      gap:8px;
+      align-items:stretch;
+      margin:0;
+    }
+    .timeControlRow .control{margin:0}
+    .timeControlRow .btns{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin:0;
+    }
+    .timeControlRow .btns button{
+      width:100%;
+      flex:1;
+      padding:7px 9px;
+    }
+    .btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
+    button{
+      border:1px solid #c2cfde;
+      background:#fff;
+      border-radius:12px;
+      padding:10px 14px;
+      font-weight:800;
+      cursor:pointer;
+      color:var(--ink);
+      box-shadow:var(--shadow-soft);
+      transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    button:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(15,23,42,.08)}
+    button.primary{
+      background:linear-gradient(180deg,var(--accent2),var(--accent));
+      border-color:var(--accent);
+      color:#fff;
+    }
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+    .stat{
+      border:1px solid #e6edf5;
+      background:linear-gradient(180deg,#ffffff,#f8fbff);
+      border-radius:14px;
+      padding:11px;
+      position:relative;
+      overflow:hidden;
+    }
+    .stat::before{
+      content:"";
+      position:absolute;left:0;top:0;bottom:0;width:4px;
+      background:linear-gradient(180deg,var(--accent2),var(--accent));
+      opacity:.9;
+    }
+    .stat span{display:block;color:var(--muted);font-size:.78rem;margin-left:6px}
+    .stat strong{display:block;font-size:1.03rem;margin-left:6px;margin-top:3px}
+    .status{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid #dbe6f3;
+      background:linear-gradient(135deg,#f8fbff,#eef5ff);
+      font-weight:700;
+      line-height:1.45;
+    }
+    .main{display:grid;gap:16px;min-width:0}
+    .visuals{display:grid;grid-template-columns:540px 1fr;gap:16px;align-items:start}
+    .plotArea{display:grid;gap:16px;min-width:0}
+    .legend{display:flex;flex-wrap:wrap;gap:8px 12px;color:var(--muted);font-size:.92rem;margin-top:12px}
+    .key{display:inline-flex;align-items:center;gap:6px}
+    .sw{width:18px;height:10px;border-radius:999px;display:inline-block}
+    .sw.ex{background:var(--zone1);border:1px solid #b5cff6}
+    .sw.mtz{background:var(--zone2);border:1px solid #f0c98e}
+    .sw.fr{background:var(--zone3);border:1px solid #d4dce4}
+    .sw.ads{background:var(--orange)}
+    .sw.out{background:var(--green)}
+    .cards2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+    svg{display:block;width:100%;height:auto;max-width:100%}
+    .plot{background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid #e7edf5;border-radius:16px}
+    .axis{stroke:#344054;stroke-width:2}
+    .gridline{stroke:#dde5ef;stroke-width:1}
+    .tick{font-size:13px;fill:#667085}
+    .curve{fill:none;stroke:var(--green);stroke-width:4.5}
+    .dash{stroke:#667085;stroke-width:2;stroke-dasharray:7 7}
+    .threshold{stroke:#d97000;stroke-width:2;stroke-dasharray:6 6}
+    .point{stroke:#fff;stroke-width:3;fill:var(--green)}
+    .infoGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .info{
+      border:1px solid #e7edf5;
+      border-radius:14px;
+      padding:13px;
+      background:linear-gradient(180deg,#ffffff,#fbfdff);
+      box-shadow:var(--shadow-soft);
+    }
+    .info h3{margin:0 0 6px;font-size:1rem}
+    .info p{margin:0;color:var(--muted);font-size:.95rem}
+    .formula{font-family:"Times New Roman",Times,serif;font-style:italic}
+    .subtle{font-size:.9rem;color:var(--muted)}
+    @media(max-width:1120px){
+      .visuals{grid-template-columns:1fr}
+    }
+    @media(max-width:980px){
+      .layout,.cards2,.infoGrid{grid-template-columns:1fr}
+      .controls{position:static}
+      .controlRow{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:760px){
+      .wrap{padding:12px}
+      .hero,.card{padding:14px;border-radius:16px}
+      .stats{grid-template-columns:1fr}
+      .legend{font-size:.88rem}
+    }
+    @media(max-width:640px){
+      h1{font-size:1.55rem}
+      .lead{font-size:.96rem}
+      .layout,.visuals,.cards2,.infoGrid{gap:12px}
+      .control{padding:11px 10px 9px}
+      .control label{flex-direction:column;align-items:flex-start;gap:8px}
+      .pill{align-self:flex-start}
+      .btns button{flex:1 1 0; min-width:0}
+      .timeControlRow{grid-template-columns:minmax(0,1fr) 76px}
+      .timeControlRow .btns button{padding:7px 8px}
+      .status,.info p,.muted,.subtle{font-size:.92rem}
+    }
+    @media(max-width:480px){
+      .wrap{padding:10px}
+      .hero,.card{padding:12px}
+      .hero h1{font-size:1.42rem}
+      .controls h2,.card h2{font-size:1.02rem}
+      .stat strong{font-size:.98rem}
+      .controlRow{grid-template-columns:1fr}
+      .legend{flex-direction:column;align-items:flex-start;gap:8px}
+      button{padding:10px 12px}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1>Packed-bed adsorption: physical meaning of the MTZ</h1>
+    <p class="lead">This simulation shows a <strong>vertical fixed-bed column</strong> packed with adsorbent particles. Water enters from the <strong>top</strong> and flows <strong>downward</strong>. The <strong>mass transfer zone (MTZ)</strong> is where adsorption is actively happening. Increasing <strong>C<sub>0</sub></strong> makes the bed fill faster, so breakthrough occurs earlier.</p>
+  </section>
+
+  <div class="layout">
+    <aside class="card controls">
+      <h2>Simulation controls</h2>
+      <p class="subtle">Adjust the bed geometry and inlet concentration, then watch the MTZ move downward through the packed adsorbent bed.</p>
+
+      <div class="controlRow">
+        <div class="timeControlRow">
+          <div class="control compact">
+            <label for="timeSlider"><span>Time, <span class="formula">t</span></span><span class="pill" id="timeValue">0 min</span></label>
+            <input id="timeSlider" type="range" min="0" max="100" step="1" value="0">
+          </div>
+
+          <div class="btns">
+            <button id="playBtn" class="primary">Play</button>
+            <button id="resetBtn">Reset</button>
+          </div>
+        </div>
+
+        <div class="control compact">
+          <label for="bedSlider"><span>Bed height, <span class="formula">Z</span></span><span class="pill" id="bedValue">1.80 m</span></label>
+          <input id="bedSlider" type="range" min="0.6" max="1.8" step="0.1" value="1.8">
+        </div>
+
+        <div class="control compact">
+          <label for="mtzSlider"><span>MTZ height, <span class="formula">H<sub>MTZ</sub></span></span><span class="pill" id="mtzValue">0.22 m</span></label>
+          <input id="mtzSlider" type="range" min="0.10" max="0.45" step="0.01" value="0.22">
+        </div>
+
+        <div class="control compact">
+          <label for="feedSlider"><span>Inlet concentration, <span class="formula">C<sub>0</sub></span></span><span class="pill" id="feedValue">1.00</span></label>
+          <input id="feedSlider" type="range" min="0.5" max="2.0" step="0.1" value="1.0">
+        </div>
+      </div>
+
+    </aside>
+
+    <section class="main">
+      <div class="visuals">
+        <div class="card">
+          <h2>Vertical packed column</h2>
+          <svg id="columnSvg" viewBox="0 0 540 760" aria-label="Packed adsorption column simulation">
+            <defs>
+              <marker id="arrowDown" markerWidth="10" markerHeight="10" refX="3" refY="9" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L6,0 L3,9 z" fill="#172033"></path>
+              </marker>
+              <linearGradient id="glassFill" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0%" stop-color="#f7fbff"></stop>
+                <stop offset="18%" stop-color="#ffffff"></stop>
+                <stop offset="52%" stop-color="#eef5ff"></stop>
+                <stop offset="100%" stop-color="#dceaff"></stop>
+              </linearGradient>
+              <linearGradient id="zoneExGrad" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#cfe0ff"></stop>
+                <stop offset="100%" stop-color="#e6efff"></stop>
+              </linearGradient>
+              <linearGradient id="zoneMtzGrad" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#ffd9a8"></stop>
+                <stop offset="100%" stop-color="#fff0d8"></stop>
+              </linearGradient>
+              <linearGradient id="zoneFrGrad" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#f3f7fb"></stop>
+                <stop offset="100%" stop-color="#e8f0f6"></stop>
+              </linearGradient>
+              <linearGradient id="metalGrad" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#dce3ec"></stop>
+                <stop offset="50%" stop-color="#b8c4d1"></stop>
+                <stop offset="100%" stop-color="#8f9fb2"></stop>
+              </linearGradient>
+              <filter id="softShadow" x="-30%" y="-20%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#93a4bf" flood-opacity="0.22"></feDropShadow>
+              </filter>
+              <clipPath id="colClip"><rect id="clipRect" x="110" y="90" width="180" height="312" rx="24" ry="24"></rect></clipPath>
+            </defs>
+
+            <rect x="30" y="60" width="470" height="380" rx="28" ry="28" fill="#f9fbff" stroke="#d6e1ee" filter="url(#softShadow)"></rect>
+            
+            <rect id="shellBg" x="96" y="78" width="208" height="336" rx="30" ry="30" fill="#f3f7fc" stroke="#c4d1df" stroke-width="2"></rect>
+            <rect id="capTop" x="124" y="72" width="152" height="26" rx="12" ry="12" fill="url(#metalGrad)" stroke="#74869a" stroke-width="1.5"></rect>
+            <rect id="capBottom" x="124" y="394" width="152" height="26" rx="12" ry="12" fill="url(#metalGrad)" stroke="#74869a" stroke-width="1.5"></rect>
+            <rect id="nozzleTop" x="183" y="52" width="34" height="24" rx="8" ry="8" fill="url(#metalGrad)" stroke="#74869a" stroke-width="1.5"></rect>
+            <rect id="nozzleBottom" x="183" y="420" width="34" height="24" rx="8" ry="8" fill="url(#metalGrad)" stroke="#74869a" stroke-width="1.5"></rect>
+            <g id="inletFlowLayer"></g>
+            <g id="outletFlowLayer"></g>
+            <text id="inletVisualLabel" x="320" y="74" font-size="14" fill="#2452ad" font-weight="700">Inlet water: high adsorbate</text>
+            <text id="outletVisualLabel" x="320" y="520" font-size="14" fill="#16825d" font-weight="700">Outlet water: C/C₀ = 0.00</text>
+
+            <text id="feedLabel" x="330" y="118" font-size="21" fill="#172033" font-weight="700">Inlet</text>
+            <text id="c0Label" x="327" y="143" font-size="23" fill="#2452ad" font-family="Times New Roman" font-style="italic">C<tspan baseline-shift="sub" font-size="15">0</tspan></text>
+            <text id="effluentLabel" x="330" y="454" font-size="21" fill="#172033" font-weight="700">Outlet</text>
+            <text id="coutLabel" x="327" y="479" font-size="23" fill="#16825d" font-family="Times New Roman" font-style="italic">C<tspan baseline-shift="sub" font-size="15">out</tspan></text>
+
+            <rect id="colBg" x="110" y="90" width="180" height="312" rx="24" ry="24" fill="url(#glassFill)" stroke="#7b8ea4" stroke-width="2.6" filter="url(#softShadow)"></rect>
+            <g clip-path="url(#colClip)">
+              <rect id="zoneEx" x="110" y="70" width="180" height="0" fill="url(#zoneExGrad)"></rect>
+              <rect id="zoneMtz" x="110" y="70" width="180" height="0" fill="url(#zoneMtzGrad)"></rect>
+              <rect id="zoneFr" x="110" y="70" width="180" height="580" fill="url(#zoneFrGrad)"></rect>
+              <rect id="glassHighlight1" x="126" y="90" width="26" height="312" rx="12" ry="12" fill="#ffffff" opacity="0.45"></rect>
+              <rect id="glassHighlight2" x="162" y="90" width="10" height="312" rx="5" ry="5" fill="#ffffff" opacity="0.20"></rect>
+              <g id="topDistributor"></g>
+              <g id="bottomCollector"></g>
+              <g id="liquidDots"></g>
+              <g id="beadsLayer"></g>
+            </g>
+            <rect id="colOutline" x="110" y="90" width="180" height="312" rx="24" ry="24" fill="none" stroke="#5d738c" stroke-width="2.4"></rect>
+
+            <line id="zAxis" x1="86" y1="90" x2="86" y2="402" stroke="#172033" stroke-width="2"></line>
+            <line id="zTickTop" x1="80" y1="90" x2="92" y2="90" stroke="#172033" stroke-width="2"></line>
+            <line id="zTickBot" x1="80" y1="402" x2="92" y2="402" stroke="#172033" stroke-width="2"></line>
+            <text id="zLabel" x="72" y="246" transform="rotate(-90 72 246)" text-anchor="middle" font-size="22" fill="#172033" font-family="Times New Roman" font-style="italic">Z</text>
+
+            <line id="mtzTopLine" x1="96" x2="302" y1="90" y2="90" stroke="#ef8d32" stroke-width="3" stroke-dasharray="8 6"></line>
+            <line id="mtzBotLine" x1="96" x2="302" y1="190" y2="190" stroke="#ef8d32" stroke-width="3" stroke-dasharray="8 6"></line>
+
+            <rect id="labelExBg" x="8" y="96" width="92" height="38" rx="10" fill="#ffffff" opacity="0.88"></rect>
+            <text id="labelEx" x="18" y="112" font-size="16" fill="#23324a" font-weight="800">
+              <tspan x="18" dy="0">Exhausted</tspan>
+              <tspan x="18" dy="17">zone</tspan>
+            </text>
+            <rect id="labelMtzBg" x="12" y="202" width="72" height="28" rx="10" fill="#fff7eb" opacity="0.92"></rect>
+            <text id="labelMtz" x="24" y="221" font-size="18" fill="#b66500" font-weight="900">MTZ</text>
+            <rect id="labelFrBg" x="12" y="308" width="72" height="38" rx="10" fill="#ffffff" opacity="0.88"></rect>
+            <text id="labelFr" x="24" y="324" font-size="16" fill="#23324a" font-weight="800">
+              <tspan x="24" dy="0">Fresh</tspan>
+              <tspan x="24" dy="17">zone</tspan>
+            </text>
+
+            <rect id="mtzHeightBg" x="326" y="182" width="138" height="28" rx="10" fill="#fff7eb" opacity="0.95"></rect>
+            <text id="mtzHeightText" x="336" y="201" font-size="17" fill="#b66500" font-weight="800">H_MTZ</text>
+          </svg>
+
+          <div class="legend">
+            <span class="key"><span class="sw ex"></span>exhausted zone: surface sites are essentially full</span>
+            <span class="key"><span class="sw mtz"></span>MTZ: adsorption is actively occurring</span>
+            <span class="key"><span class="sw fr"></span>fresh zone: surface sites are mostly empty</span>
+          </div>
+        </div>
+
+        <div class="plotArea">
+          <div class="card">
+            <h2>Breakthrough curve</h2>
+            <p class="muted">The effluent concentration follows a smooth breakthrough curve. Here, the outlet response is shown with a Thomas-model-style sigmoidal profile for <span class="formula">C/C<sub>0</sub></span> versus time.</p>
+            <svg id="curveSvg" class="plot" viewBox="0 0 640 410" aria-label="Breakthrough curve C over C0 versus time">
+              <g id="curveGrid"></g>
+              <path id="curvePath" class="curve"></path>
+              <line id="bLine" class="dash"></line>
+              <line id="eLine" class="dash"></line>
+              <line id="thr05" class="threshold"></line>
+              <line id="thr95" class="threshold"></line>
+              <circle id="curvePoint" class="point" r="7"></circle>
+              <text id="curveLabel" class="tick"></text>
+              <g id="curveAxis"></g>
+            </svg>
+          </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+const timeSlider=document.getElementById('timeSlider');
+const bedSlider=document.getElementById('bedSlider');
+const mtzSlider=document.getElementById('mtzSlider');
+const feedSlider=document.getElementById('feedSlider');
+const playBtn=document.getElementById('playBtn');
+const resetBtn=document.getElementById('resetBtn');
+let timer=null;
+
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+function smoothstep(x){return x<=0?0:x>=1?1:x*x*(3-2*x);}
+function logistic(z){return 1/(1+Math.exp(-z));}
+function thomasNormalized(t,tB,tE){
+  const delta=Math.max(1e-6,tE-tB);
+  const t50=(tB+tE)/2;
+  const alpha=(2*Math.log(19))/delta; // makes C/C0≈0.05 at tB and ≈0.95 at tE
+  return logistic(alpha*(t-t50));
+}
+
+function state(){
+  const t=+timeSlider.value;
+  const Z=+bedSlider.value;
+  const H=+mtzSlider.value;
+  const C0=+feedSlider.value;
+  const hFrac=H/Z;
+
+  // Fixed adsorbent capacity: a higher influent concentration uses the bed faster.
+  // Therefore both breakthrough and exhaustion times scale approximately with 1/C0.
+  const baseExhaustionTime=100;
+  const exhaustion=baseExhaustionTime/C0;            // t_E at C/C0 ≈ 0.95
+  const breakthrough=(1-hFrac)*baseExhaustionTime/C0; // t_B at C/C0 ≈ 0.05
+
+  const progress=clamp(t/exhaustion,0,1);
+  const center=(-hFrac/2) + progress*(1+hFrac);
+  const top=clamp(center-hFrac/2,0,1);
+  const bottom=clamp(center+hFrac/2,0,1);
+
+  // Thomas-model-style breakthrough curve (smooth sigmoidal outlet response)
+  const cNorm=thomasNormalized(t,breakthrough,exhaustion);
+
+  const Cout=cNorm*C0;
+  const Hex=top*Z;
+  const Hfr=(1-bottom)*Z;
+
+  return {t,Z,H,C0,hFrac,progress,top,bottom,breakthrough,exhaustion,cNorm,Cout,Hex,Hfr};
+}
+
+function drawParticle(cx,cy,r,occ,parent,siteCount=10){
+  const shell=248-Math.round(16*occ);
+  const shell2=238-Math.round(12*occ);
+  let g=`<g>`;
+  g+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="rgb(${shell},${shell},${shell2})" stroke="#7f8ea3" stroke-width="1.4"></circle>`;
+  g+=`<circle cx="${(cx-r*0.22).toFixed(1)}" cy="${(cy-r*0.22).toFixed(1)}" r="${(r*0.48).toFixed(1)}" fill="#ffffff" opacity="0.50"></circle>`;
+  g+=`<circle cx="${(cx+r*0.18).toFixed(1)}" cy="${(cy+r*0.22).toFixed(1)}" r="${(r*0.82).toFixed(1)}" fill="#b8c3cf" opacity="0.08"></circle>`;
+  for(let i=0;i<siteCount;i++){
+    const ang=(-90 + i*(360/siteCount))*Math.PI/180;
+    const sx=cx+(r+4)*Math.cos(ang);
+    const sy=cy+(r+4)*Math.sin(ang);
+    const fill=(i < Math.round(occ*siteCount)) ? '#ef8d32' : '#ffffff';
+    g+=`<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="3.3" fill="${fill}" stroke="#aab5c1" stroke-width="1"></circle>`;
+  }
+  g+='</g>';
+  parent.push(g);
+}
+
+function drawPipeFlows(s,x,y,w,h){
+  const inlet=[];
+  const outlet=[];
+  const nozzleX=x + w/2 - 17;
+  const topNozzleY=y-38;
+  const botNozzleY=y+h+18;
+  const pipeW=18;
+  const pipeX=nozzleX + 8;
+  const inletPipeTop=topNozzleY-34;
+  const inletPipeBottom=y-2;
+  const outletPipeTop=y+h+26;
+  const outletPipeBottom=botNozzleY+58;
+
+  const travelPhase=s.t*4.2;
+  const inletLen=inletPipeBottom-inletPipeTop;
+  const outletLen=outletPipeBottom-outletPipeTop;
+
+  // Inlet: homogeneous concentration, shown as a uniform tinted stream.
+  inlet.push(`<rect x="${pipeX}" y="${inletPipeTop}" width="${pipeW}" height="${inletLen}" rx="8" fill="#dff1ff" stroke="#8eb7dc" stroke-width="1.2"></rect>`);
+  inlet.push(`<rect x="${pipeX+2}" y="${inletPipeTop+2}" width="${pipeW-4}" height="${inletLen-4}" rx="7" fill="#e59433" opacity="0.40"></rect>`);
+  inlet.push(`<rect x="${pipeX}" y="${topNozzleY+4}" width="${pipeW}" height="${(y-2)-(topNozzleY+4)}" rx="8" fill="#e59433" opacity="0.40"></rect>`);
+
+  // Outlet: homogeneous stream too; C/C0 changes the overall tint/intensity rather than appearing as discrete dots.
+  const outTint = 0.05 + 0.50*s.cNorm;
+  outlet.push(`<rect x="${pipeX}" y="${outletPipeTop}" width="${pipeW}" height="${outletLen}" rx="8" fill="#dff1ff" stroke="#8eb7dc" stroke-width="1.2"></rect>`);
+  outlet.push(`<rect x="${pipeX+2}" y="${outletPipeTop+2}" width="${pipeW-4}" height="${outletLen-4}" rx="7" fill="#e59433" opacity="${outTint.toFixed(2)}"></rect>`);
+  outlet.push(`<rect x="${pipeX}" y="${y+h+2}" width="${pipeW}" height="${outletPipeBottom-(y+h+2)}" rx="8" fill="#dff1ff" opacity="0.98"></rect>`);
+  outlet.push(`<rect x="${pipeX+2}" y="${y+h+4}" width="${pipeW-4}" height="${outletPipeBottom-(y+h+6)}" rx="7" fill="#e59433" opacity="${outTint.toFixed(2)}"></rect>`);
+
+  inlet.push(`<line x1="${pipeX+pipeW/2}" y1="${inletPipeTop+3}" x2="${pipeX+pipeW/2}" y2="${y-8}" stroke="#3492ff" stroke-width="2.1" marker-end="url(#arrowDown)" opacity="0.85"></line>`);
+  outlet.push(`<line x1="${pipeX+pipeW/2}" y1="${y+h+8}" x2="${pipeX+pipeW/2}" y2="${outletPipeBottom-5}" stroke="#3492ff" stroke-width="2.1" marker-end="url(#arrowDown)" opacity="0.85"></line>`);
+
+  // Moving water streaks: motion without changing inlet concentration.
+  const streakGap=22;
+  for(let i=0;i<6;i++){
+    const segLen=12;
+    const iy=inletPipeTop + ((travelPhase + i*streakGap) % (inletLen + streakGap)) - segLen;
+    if(iy > inletPipeTop-2 && iy < inletPipeBottom){
+      inlet.push(`<line x1="${(pipeX+pipeW/2).toFixed(1)}" y1="${iy.toFixed(1)}" x2="${(pipeX+pipeW/2).toFixed(1)}" y2="${(iy+segLen).toFixed(1)}" stroke="#ffffff" stroke-width="4.8" stroke-linecap="round" opacity="0.46"></line>`);
+    }
+
+    const oy=outletPipeTop + ((travelPhase + i*streakGap) % (outletLen + streakGap)) - segLen;
+    if(oy > outletPipeTop-2 && oy < outletPipeBottom){
+      outlet.push(`<line x1="${(pipeX+pipeW/2).toFixed(1)}" y1="${oy.toFixed(1)}" x2="${(pipeX+pipeW/2).toFixed(1)}" y2="${(oy+segLen).toFixed(1)}" stroke="#8cc8ff" stroke-width="5.2" stroke-linecap="round" opacity="0.95"></line>`);
+    }
+  }
+
+  // Keep the outlet visually homogeneous: use moving highlights only, not discrete orange particles.
+
+  document.getElementById('inletVisualLabel').setAttribute('y', y-16);
+  document.getElementById('outletVisualLabel').setAttribute('y', y+h+118);
+  document.getElementById('outletVisualLabel').textContent=`Outlet water: C/C₀ = ${s.cNorm.toFixed(2)}`;
+
+  document.getElementById('inletFlowLayer').innerHTML=inlet.join('');
+  document.getElementById('outletFlowLayer').innerHTML=outlet.join('');
+}
+
+function drawColumn(s){
+  const x=110, y=90, w=180;
+  const pxPerM=260;
+  const h=s.Z*pxPerM;
+  const yOf=f=>y+f*h;
+  const topY=yOf(s.top), bottomY=yOf(s.bottom);
+
+  ['clipRect','colBg','colOutline','glassHighlight1','glassHighlight2'].forEach(id=>{
+    document.getElementById(id).setAttribute('y',y);
+    document.getElementById(id).setAttribute('height',h);
+  });
+  document.getElementById('shellBg').setAttribute('y',y-12);
+  document.getElementById('shellBg').setAttribute('height',h+24);
+  document.getElementById('capTop').setAttribute('y',y-18);
+  document.getElementById('capBottom').setAttribute('y',y+h-8);
+  document.getElementById('nozzleTop').setAttribute('y',y-38);
+  document.getElementById('nozzleBottom').setAttribute('y',y+h+18);
+
+  document.getElementById('zAxis').setAttribute('y1',y);
+  document.getElementById('zAxis').setAttribute('y2',y+h);
+  document.getElementById('zTickTop').setAttribute('y1',y);
+  document.getElementById('zTickTop').setAttribute('y2',y);
+  document.getElementById('zTickBot').setAttribute('y1',y+h);
+  document.getElementById('zTickBot').setAttribute('y2',y+h);
+  document.getElementById('zLabel').setAttribute('y', y + h/2);
+  document.getElementById('zLabel').setAttribute('transform', `rotate(-90 72 ${y + h/2})`);
+
+  document.getElementById('feedLabel').setAttribute('y', y+28);
+  document.getElementById('c0Label').setAttribute('y', y+53);
+  document.getElementById('effluentLabel').setAttribute('y', y+h+54);
+  document.getElementById('coutLabel').setAttribute('y', y+h+79);
+  document.getElementById('inletVisualLabel').setAttribute('y', y-16);
+  document.getElementById('outletVisualLabel').setAttribute('y', y+h+118);
+
+  const zoneEx=document.getElementById('zoneEx');
+  const zoneMtz=document.getElementById('zoneMtz');
+  const zoneFr=document.getElementById('zoneFr');
+
+  zoneEx.setAttribute('y',y);
+  zoneEx.setAttribute('height',Math.max(0,topY-y));
+  zoneMtz.setAttribute('y',topY);
+  zoneMtz.setAttribute('height',Math.max(0,bottomY-topY));
+  zoneFr.setAttribute('y',bottomY);
+  zoneFr.setAttribute('height',Math.max(0,y+h-bottomY));
+
+  document.getElementById('mtzTopLine').setAttribute('y1',topY);
+  document.getElementById('mtzTopLine').setAttribute('y2',topY);
+  document.getElementById('mtzBotLine').setAttribute('y1',bottomY);
+  document.getElementById('mtzBotLine').setAttribute('y2',bottomY);
+
+  // Place zone labels so they stay readable and do not overlap.
+  let exY = y + Math.max(26,(topY-y)/2);
+  let mtzY = topY + Math.max(18,(bottomY-topY)/2);
+  let frY = bottomY + Math.max(26,(y+h-bottomY)/2);
+  const minGap = 52;
+  const topBound = y + 24;
+  const botBound = y + h - 24;
+  exY = clamp(exY, topBound, botBound-2*minGap);
+  mtzY = clamp(mtzY, exY + minGap, botBound-minGap);
+  frY = clamp(frY, mtzY + minGap, botBound);
+  if(frY - mtzY < minGap){
+    frY = Math.min(botBound, mtzY + minGap);
+    mtzY = Math.max(exY + minGap, frY - minGap);
+  }
+  if(mtzY - exY < minGap){
+    mtzY = Math.min(frY - minGap, exY + minGap);
+  }
+
+  // Multi-line zone labels with subtle white backplates.
+  document.getElementById('labelEx').setAttribute('y', exY - 8);
+  document.getElementById('labelExBg').setAttribute('y', exY - 24);
+  document.getElementById('labelMtz').setAttribute('y', mtzY + 6);
+  document.getElementById('labelMtzBg').setAttribute('y', mtzY - 14);
+  document.getElementById('labelFr').setAttribute('y', frY - 8);
+  document.getElementById('labelFrBg').setAttribute('y', frY - 24);
+
+  const mtzTextY = (topY + bottomY)/2;
+  document.getElementById('mtzHeightText').setAttribute('y', mtzTextY + 6);
+  document.getElementById('mtzHeightBg').setAttribute('y', mtzTextY - 14);
+  document.getElementById('mtzHeightText').textContent=`H_MTZ = ${s.H.toFixed(2)} m`;
+
+  // internal distributor and collector plates
+  let topPlate='', bottomPlate='';
+  const holes=11;
+  const plateInset=16;
+  const x1=x+plateInset, x2=x+w-plateInset;
+  const topPlateY=y+12, botPlateY=y+h-12;
+  topPlate += `<rect x="${x+10}" y="${y+5}" width="${w-20}" height="10" rx="4" fill="#d8e2ec" opacity="0.95"></rect>`;
+  bottomPlate += `<rect x="${x+10}" y="${y+h-15}" width="${w-20}" height="10" rx="4" fill="#d8e2ec" opacity="0.95"></rect>`;
+  for(let i=0;i<holes;i++){
+    const hx=x1 + i*(x2-x1)/(holes-1);
+    topPlate += `<circle cx="${hx.toFixed(1)}" cy="${topPlateY.toFixed(1)}" r="1.5" fill="#8fa0b1"></circle>`;
+    bottomPlate += `<circle cx="${hx.toFixed(1)}" cy="${botPlateY.toFixed(1)}" r="1.5" fill="#8fa0b1"></circle>`;
+  }
+  document.getElementById('topDistributor').innerHTML=topPlate;
+  document.getElementById('bottomCollector').innerHTML=bottomPlate;
+
+  // No floating blue dots inside the column; the colored zones and bead loading show the MTZ.
+  document.getElementById('liquidDots').innerHTML='';
+
+  // packed adsorbent beads
+  const beads=[];
+  const cols=4;
+  const rows=Math.max(5, Math.round(h/50));
+  const x0=132, dx=39, r=14;
+  const topPad=24, botPad=26;
+  const usable=Math.max(40, h-topPad-botPad);
+  const dy=(rows===1)?0:usable/(rows-1);
+  for(let row=0; row<rows; row++){
+    for(let col=0; col<cols; col++){
+      const cx=x0 + col*dx + ((row%2)*8);
+      const cy=y + topPad + row*dy;
+      const frac=(cy-y)/h;
+      let occ;
+      if(frac <= s.top) occ=1;
+      else if(frac >= s.bottom) occ=0;
+      else occ=1 - (frac-s.top)/(Math.max(0.001,s.bottom-s.top));
+      occ=clamp(occ,0,1);
+      drawParticle(cx,cy,r,occ,beads,10);
+    }
+  }
+  document.getElementById('beadsLayer').innerHTML=beads.join('');
+  drawPipeFlows(s,x,y,w,h);
+}
+function plotAxes(gridId,axisId,W,H,l,r,t,b,xmax,ymax,xLabel,yLabel){
+  const x=v=>l+(v/xmax)*(W-l-r);
+  const y=v=>H-b-(v/ymax)*(H-t-b);
+  let grid='',axis='';
+  for(let i=0;i<=5;i++){
+    const xv=i*xmax/5, xp=x(xv);
+    grid += `<line class="gridline" x1="${xp}" y1="${t}" x2="${xp}" y2="${H-b}"></line>`;
+    axis += `<text class="tick" x="${xp}" y="${H-b+24}" text-anchor="middle">${xv.toFixed(0)}</text>`;
+  }
+  for(let i=0;i<=5;i++){
+    const yv=i*ymax/5, yp=y(yv);
+    grid += `<line class="gridline" x1="${l}" y1="${yp}" x2="${W-r}" y2="${yp}"></line>`;
+    axis += `<text class="tick" x="${l-10}" y="${yp+4}" text-anchor="end">${yv.toFixed(1)}</text>`;
+  }
+  grid += `<line class="axis" x1="${l}" y1="${H-b}" x2="${W-r}" y2="${H-b}"></line>`;
+  grid += `<line class="axis" x1="${l}" y1="${t}" x2="${l}" y2="${H-b}"></line>`;
+  axis += `<text class="tick" x="${(W+l-r)/2}" y="${H-34}" text-anchor="middle">${xLabel}</text>`;
+  axis += `<text class="tick" transform="translate(18 ${(H+t-b)/2}) rotate(-90)" text-anchor="middle">${yLabel}</text>`;
+  document.getElementById(gridId).innerHTML=grid;
+  document.getElementById(axisId).innerHTML=axis;
+  return {x,y,W,H,l,r,t,b,xmax,ymax};
+}
+
+function drawCurve(s){
+  const xmax=Math.max(100, Math.ceil(s.exhaustion*1.1));
+  const scale=plotAxes('curveGrid','curveAxis',640,410,62,20,28,74,xmax,1.0,'time (min)','C/C₀');
+  let d='';
+  for(let i=0;i<=400;i++){
+    const tt=scale.xmax*i/400;
+    const c=thomasNormalized(tt,s.breakthrough,s.exhaustion);
+    d += (i?'L':'M') + scale.x(tt).toFixed(1) + ' ' + scale.y(c).toFixed(1) + ' ';
+  }
+  document.getElementById('curvePath').setAttribute('d',d);
+
+  const bLine=document.getElementById('bLine');
+  bLine.setAttribute('x1',scale.x(s.breakthrough));
+  bLine.setAttribute('x2',scale.x(s.breakthrough));
+  bLine.setAttribute('y1',scale.t);
+  bLine.setAttribute('y2',scale.H-scale.b);
+
+  const eLine=document.getElementById('eLine');
+  eLine.setAttribute('x1',scale.x(s.exhaustion));
+  eLine.setAttribute('x2',scale.x(s.exhaustion));
+  eLine.setAttribute('y1',scale.t);
+  eLine.setAttribute('y2',scale.H-scale.b);
+
+  const thr05=document.getElementById('thr05');
+  thr05.setAttribute('x1',scale.l); thr05.setAttribute('x2',scale.W-scale.r);
+  thr05.setAttribute('y1',scale.y(0.05)); thr05.setAttribute('y2',scale.y(0.05));
+
+  const thr95=document.getElementById('thr95');
+  thr95.setAttribute('x1',scale.l); thr95.setAttribute('x2',scale.W-scale.r);
+  thr95.setAttribute('y1',scale.y(0.95)); thr95.setAttribute('y2',scale.y(0.95));
+
+  const pt=document.getElementById('curvePoint');
+  pt.setAttribute('cx',scale.x(s.t));
+  pt.setAttribute('cy',scale.y(s.cNorm));
+
+  const label=document.getElementById('curveLabel');
+  label.setAttribute('x',Math.min(scale.x(s.t)+10,scale.W-scale.r-86));
+  label.setAttribute('y',Math.max(18,scale.y(s.cNorm)-12));
+  label.textContent=`C/C₀ = ${s.cNorm.toFixed(2)}`;
+
+  const axis=document.getElementById('curveAxis');
+  axis.innerHTML += `<text class="tick" x="${scale.x(s.breakthrough)}" y="${scale.H-scale.b+42}" text-anchor="middle">t_B</text>`;
+  axis.innerHTML += `<text class="tick" x="${scale.x(s.exhaustion)}" y="${scale.H-scale.b+42}" text-anchor="middle">t_E</text>`;
+  const pairY = scale.H-17;
+  const centerX = (scale.W+scale.l-scale.r)/2;
+  axis.innerHTML += `<text class="tick" x="${centerX-90}" y="${pairY}" text-anchor="middle">t_B = ${s.breakthrough.toFixed(1)} min</text>`;
+  axis.innerHTML += `<text class="tick" x="${centerX+90}" y="${pairY}" text-anchor="middle">t_E = ${s.exhaustion.toFixed(1)} min</text>`;
+  axis.innerHTML += `<text class="tick" x="${scale.l+4}" y="${scale.y(0.05)-7}">0.05</text>`;
+  axis.innerHTML += `<text class="tick" x="${scale.l+4}" y="${scale.y(0.95)-7}">0.95</text>`;
+}
+
+function drawLegendParticles(){
+  const svg=document.getElementById('particleLegend');
+  const pieces=[];
+  const groups=[
+    {cx:92, occ:1, title:'Exhausted', sub:'sites filled'},
+    {cx:260, occ:0.5, title:'MTZ', sub:'partly loaded'},
+    {cx:428, occ:0, title:'Fresh', sub:'sites open'}
+  ];
+  groups.forEach(g=>{
+    pieces.push(`<text x="${g.cx}" y="28" text-anchor="middle" font-size="18" fill="#172033" font-weight="800">${g.title}</text>`);
+    pieces.push(`<text x="${g.cx}" y="48" text-anchor="middle" font-size="14" fill="#5f6b7a">${g.sub}</text>`);
+    let p=[];
+    drawParticle(g.cx,120,33,g.occ,p,12);
+    pieces.push(p.join(''));
+  });
+  svg.innerHTML=pieces.join('');
+}
+
+function update(){
+  const s=state();
+  timeSlider.max=Math.max(100, Math.ceil(s.exhaustion*1.05));
+  document.getElementById('timeValue').textContent=`${s.t.toFixed(0)} min`;
+  document.getElementById('bedValue').textContent=`${s.Z.toFixed(2)} m`;
+  document.getElementById('mtzValue').textContent=`${s.H.toFixed(2)} m`;
+  document.getElementById('feedValue').textContent=s.C0.toFixed(2);
+
+
+  drawColumn(s);
+  drawCurve(s);
+}
+
+playBtn.addEventListener('click',()=>{
+  if(timer){
+    clearInterval(timer); timer=null; playBtn.textContent='Play'; return;
+  }
+  playBtn.textContent='Pause';
+  timer=setInterval(()=>{
+    const next=+timeSlider.value + 1;
+    if(next>+timeSlider.max){ clearInterval(timer); timer=null; playBtn.textContent='Play'; return; }
+    timeSlider.value=next; update();
+  },85);
+});
+
+resetBtn.addEventListener('click',()=>{
+  if(timer){
+    clearInterval(timer);
+    timer=null;
+    playBtn.textContent='Play';
+  }
+
+  timeSlider.value=0;
+  bedSlider.value=1.8;
+  mtzSlider.value=0.22;
+  feedSlider.value=1.0;
+
+  update();
+});
+
+[timeSlider,bedSlider,mtzSlider,feedSlider].forEach(el=>el.addEventListener('input',update));
+update();
+</script>
+</body>
+</html>
